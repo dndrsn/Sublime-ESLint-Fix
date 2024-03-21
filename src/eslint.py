@@ -11,13 +11,6 @@ _IS_WINDOWS = sublime.platform() == 'windows'
 _ERROR_EXIT_CODE = 2
 
 
-def _get_node_path():
-    node = pathutil.find_executable(preferences.get_path(), 'node')
-    if not node:
-        raise Exception('Could not find Node.js. Check that your configuration is correct.')
-    return node
-
-
 def _get_eslint_path():
     eslint = pathutil.find_executable(preferences.get_path(), 'eslint')
     if not eslint:
@@ -30,12 +23,9 @@ def _get_command(directory, filename):
 
     local_eslint = preferences.get_local_eslint_path(directory)
     if local_eslint:
-        cmd = [_get_node_path(), local_eslint]
+        cmd = [local_eslint]
     else:
-        if _IS_WINDOWS:
-            cmd = [_get_eslint_path()]
-        else:
-            cmd = [_get_node_path(), _get_eslint_path()]
+        cmd = [_get_eslint_path()]
 
     cmd.extend([
         '--stdin',
